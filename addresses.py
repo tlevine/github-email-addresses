@@ -33,9 +33,11 @@ def itermembers():
                     continue
                 real_commit = commit['commit']
                 author = real_commit['author']
+
+                name = author.get('name', member['login'])
                 email = author['email']
                 if email != None and 'no-reply' not in email:
-                    yield real_commit.get('name', member['login']), email
+                    yield name, email
                     done = True
 
 if __name__ == '__main__':
