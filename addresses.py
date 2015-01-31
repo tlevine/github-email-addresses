@@ -9,10 +9,21 @@ headers = {
 }
 
 def main():
-    import csv, sys
-    w = csv.writer(sys.stdout)
+    import csv
+    a = open('addresses.csv', 'w')
+    b = open('addresses.mutt', 'w')
+    w = csv.writer(a)
     w.writerow(('name', 'email_address'))
-    w.writerows(itermembers())
+    ids = set()
+    for member in itermembers():
+        w.writerow(member)
+        id = member[0].replace(' ', '.').replace('..', '.').lower()
+        ids.add(id)
+        alias = (id,) + member
+        b.write('alias %s %s <%s>\n' % alias)
+    b.write('alias cyberwizard ' + ', '.join(sorted(ids)))
+    a.close()
+    b.close()
 
 @vlermv.cache('~/.github-email-addresses', serializer = pickle)
 def get(url):
